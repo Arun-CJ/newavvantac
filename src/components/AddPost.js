@@ -1,18 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useParams, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
-function EditPosts() {
+function AddPosts() {
   const [postInfo, setPostInfo] = useState([]);
-  const params = useParams();
-
-  useEffect(() => {
-    fetch(`https://jsonplaceholder.typicode.com/posts/${params.postId}`, {
-      method: "GET",
-    })
-      .then((response) => response.json())
-      .then((data) => setPostInfo(data))
-      .catch((err) => console.log(err));
-  }, []);
 
   const handleInputs = (e) => {
     console.log(e.target.name, e.target.value);
@@ -22,25 +12,30 @@ function EditPosts() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(postInfo);
-    fetch(`https://jsonplaceholder.typicode.com/posts/${params.postId}`, {
-      method: "PUT",
-      body: JSON.stringify({
-        id: postInfo.id,
-        title: postInfo.title,
-        body: postInfo.body,
-        userId: postInfo.userId,
-      }),
+    fetch(`https://jsonplaceholder.typicode.com/posts`, {
+      method: "POST",
+      body: JSON.stringify(postInfo),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
     })
       .then((response) => response.json())
-      .then((json) => console.log(json))
+      .then((json) => setPostInfo(json))
       .catch((err) => console.log(err));
   };
 
   return (
     <form onSubmit={(e) => handleSubmit(e)}>
+      <div className="form-group">
+        <label>User Id</label>
+        <input
+          className="form-control"
+          type="text"
+          name="userId"
+          value={postInfo.userId}
+          onChange={(e) => handleInputs(e)}
+        />
+      </div>
       <div className="form-group">
         <label>Title</label>
         <input
@@ -62,9 +57,9 @@ function EditPosts() {
           onChange={(e) => handleInputs(e)}
         />
       </div>
-      <button className="btn btn-primary mt-5">Update Post</button>
+      <button className="btn btn-primary mt-5">Add Post</button>
     </form>
   );
 }
 
-export default EditPosts;
+export default AddPosts;

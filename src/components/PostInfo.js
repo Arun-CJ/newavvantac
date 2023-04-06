@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, NavLink } from "react-router-dom";
 
 const PostInfo = () => {
   const [postInfo, setPostInfo] = useState([]);
@@ -28,7 +28,9 @@ const PostInfo = () => {
       <h2>{postInfo.title} </h2>
       <p>{postInfo.body}</p>
       <p>Created By: {postInfo.userId}</p>
-      <button className="btn btn-secondary">Edit</button>
+      <NavLink to={`/edit-post/${postInfo.id}`} className="btn btn-secondary">
+        Edit
+      </NavLink>
     </div>
   );
 };
